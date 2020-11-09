@@ -1,6 +1,7 @@
 ﻿using IronXL;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Excel
@@ -13,32 +14,35 @@ namespace Excel
             ws = wb.GetWorkSheet("Sheet1");
             ws["A1"].Value = "FirstName"; //access A1 cell and edit the value
             ws["B1"].Value = "LastName";
-            for (int i = 2; i < 4; i++)
-            {
-                ws["A" + i].Value = Console.ReadLine();
-                ws["B" + i].Value = Console.ReadLine();
-            }
-            wb.SaveAs("sample.xlsx");   //save changes
-        }
-        public static void ReadExcel(out WorkBook wb, out WorkSheet ws)
-        {
-            wb = WorkBook.Load("sample.xlsx");
-            ws = wb.GetWorkSheet("Sheet1");
-
-            for (int i = 2; i < 4; i++)
-            {
-                foreach (var firstname in ws["A" + i])
+            for (int i = ws.Rows.Count()+1; i <= ws.Rows.Count()+2; i++)
+            {                
+               
+                Console.WriteLine("Do you want to add a record? y/n");
+                var answer = Console.ReadLine();
+                if (answer == "n")
                 {
-                    foreach (var lastname in ws["B" + i])
+                    wb.SaveAs("sample.xlsx");   //save changes
+                    Console.WriteLine("Saved");
+                    for (i = 2; i <= ws.Rows.Count(); i++)
                     {
-                        Console.WriteLine("FirstName: {0},LastName:{1}", firstname.Text, lastname.Text);
+                        foreach (var firstname in ws["A" + i])
+                        {
+                            foreach (var lastname in ws["B" + i])
+                            {
+                                Console.WriteLine("FirstName: {0},LastName:{1}", firstname.Text, lastname.Text);
+                                
+                            }
+
+                        }                       
                     }
-
+                    Environment.Exit(0);
                 }
-            }
+                Console.WriteLine("What is your firstname?");
+                ws["A" + i].Value = Console.ReadLine();
+                Console.WriteLine("What is your lastname?");
+                ws["B" + i].Value = Console.ReadLine();
+            }           
         }
-
-
     }
 
 }

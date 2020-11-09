@@ -15,7 +15,6 @@ namespace Excel
             WorkBook wb;
             WorkSheet ws;
             Util.WriteExcel(out wb, out ws);
-            Util.ReadExcel(out wb, out ws);
 
         }
 
